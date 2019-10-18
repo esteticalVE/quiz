@@ -1,11 +1,13 @@
-import React, { useState} from 'react'
+import React, {useState} from 'react'
 import classes from './Quiz.module.css'
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
+import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
 
 
 
 const Quiz: React.FC = () => {
   
+  const [isFinished, setIsFinished] = useState(false)
   const [answerState, setAnswerState] = useState<any>(null)
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [quiz, setQuiz] = useState([
@@ -36,11 +38,10 @@ const Quiz: React.FC = () => {
   const onAnswerClickHandler = (answerId: number | string) => {
     const question = quiz[activeQuestion]
     if (question.rightAnswerId === answerId) {
-      
       setAnswerState({[answerId]: 'success'})
       const timeout = window.setTimeout(() => {
         if (isQuizFinished()) {
-          console.log('finished')
+          setIsFinished(true)
         } else {
           setActiveQuestion(activeQuestion + 1)
           setAnswerState([])
@@ -60,14 +61,22 @@ const Quiz: React.FC = () => {
     <div className={classes.Quiz}>
       <div className={classes.QuizWrapper}>
         <h1> Ответьте на все вопросы </h1>
-        <ActiveQuiz
-          answers={quiz[activeQuestion].answers}
-          question={quiz[activeQuestion].question}
-          onAnswerClick={onAnswerClickHandler}
-          quizLength={quiz.length}
-          answerNumber={activeQuestion + 1}
-          state={answerState}
-        />
+        
+        {
+          isFinished ?
+            <FinishedQuiz
+            
+            />
+            :
+            <ActiveQuiz
+              answers={quiz[activeQuestion].answers}
+              question={quiz[activeQuestion].question}
+              onAnswerClick={onAnswerClickHandler}
+              quizLength={quiz.length}
+              answerNumber={activeQuestion + 1}
+              state={answerState}
+            />
+        }
       </div>
     </div>
   )
