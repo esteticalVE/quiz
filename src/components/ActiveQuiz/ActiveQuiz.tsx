@@ -1,9 +1,17 @@
-//todo current quiz
-
 import React from 'react'
 import classes from './ActiveQuiz.module.css'
+import AnswersList from './AnswersList/AnswersList';
 
-const ActiveQuiz = (props: any) => {
+type TAnswer = {
+  text: string
+}
+
+type TProps = {
+  answers: Array<TAnswer>
+}
+
+
+const ActiveQuiz = (props: TProps) => {
   return (
     <div className={classes.ActiveQuiz}>
       <p className={classes.Question}>
@@ -15,14 +23,12 @@ const ActiveQuiz = (props: any) => {
         </span>
         <small> 4 из 15 </small>
       </p>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-      </ul>
+      <AnswersList
+        answers={props.answers}
+      />
     </div>
   )
 }
+
 
 export default ActiveQuiz
