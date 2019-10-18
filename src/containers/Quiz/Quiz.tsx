@@ -3,10 +3,10 @@ import classes from './Quiz.module.css'
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 
 
+
 const Quiz: React.FC = () => {
   
-  const [answerState, setAnswerState] = useState([])
-  console.log('asdasd',answerState)
+  const [answerState, setAnswerState] = useState<any>(null)
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [quiz, setQuiz] = useState([
     {
@@ -37,7 +37,6 @@ const Quiz: React.FC = () => {
     const question = quiz[activeQuestion]
     if (question.rightAnswerId === answerId) {
       
-      // @ts-ignore
       setAnswerState({[answerId]: 'success'})
       const timeout = window.setTimeout(() => {
         if (isQuizFinished()) {
@@ -49,7 +48,6 @@ const Quiz: React.FC = () => {
         window.clearTimeout(timeout)
       }, 1000)
     } else {
-      // @ts-ignore
       setAnswerState({[answerId]: 'error'})
     }
   }

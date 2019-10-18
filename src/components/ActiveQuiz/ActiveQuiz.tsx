@@ -2,7 +2,7 @@ import React from 'react'
 import classes from './ActiveQuiz.module.css'
 import AnswersList from './AnswersList/AnswersList';
 
-//todo номер вопроса и кол-во всех вопросов
+
 type TAnswer = {
   text: string
   id: number
