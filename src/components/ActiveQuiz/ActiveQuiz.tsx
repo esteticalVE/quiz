@@ -14,6 +14,7 @@ type TProps = {
   onAnswerClick: Function
   quizLength: number,
   answerNumber: number
+  state: string | null | never[]
 }
 
 
@@ -30,6 +31,7 @@ const ActiveQuiz = (props: TProps) => {
         <small> {props.answerNumber} из {props.quizLength} </small>
       </p>
       <AnswersList
+        state={props.state}
         answers={props.answers}
         onAnswerClick={props.onAnswerClick}
       />

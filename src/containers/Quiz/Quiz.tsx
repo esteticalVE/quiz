@@ -1,9 +1,12 @@
-import React, {Component, useState} from 'react'
+import React, { useState} from 'react'
 import classes from './Quiz.module.css'
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 
+
 const Quiz: React.FC = () => {
   
+  const [answerState, setAnswerState] = useState([])
+  console.log('asdasd',answerState)
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [quiz, setQuiz] = useState([
     {
@@ -31,7 +34,28 @@ const Quiz: React.FC = () => {
   
   ])
   const onAnswerClickHandler = (answerId: number | string) => {
-    setActiveQuestion(activeQuestion + 1)
+    const question = quiz[activeQuestion]
+    if (question.rightAnswerId === answerId) {
+      
+      // @ts-ignore
+      setAnswerState({[answerId]: 'success'})
+      const timeout = window.setTimeout(() => {
+        if (isQuizFinished()) {
+          console.log('finished')
+        } else {
+          setActiveQuestion(activeQuestion + 1)
+          setAnswerState([])
+        }
+        window.clearTimeout(timeout)
+      }, 1000)
+    } else {
+      // @ts-ignore
+      setAnswerState({[answerId]: 'error'})
+    }
+  }
+  
+  function isQuizFinished() {
+    return activeQuestion + 1 === quiz.length
   }
   
   return (
@@ -44,6 +68,7 @@ const Quiz: React.FC = () => {
           onAnswerClick={onAnswerClickHandler}
           quizLength={quiz.length}
           answerNumber={activeQuestion + 1}
+          state={answerState}
         />
       </div>
     </div>
