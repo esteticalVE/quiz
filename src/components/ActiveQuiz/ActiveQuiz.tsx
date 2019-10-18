@@ -4,10 +4,13 @@ import AnswersList from './AnswersList/AnswersList';
 
 type TAnswer = {
   text: string
+  id: number
 }
 
 type TProps = {
   answers: Array<TAnswer>
+  question: string
+  onAnswerClick: Function
 }
 
 
@@ -19,12 +22,13 @@ const ActiveQuiz = (props: TProps) => {
           <strong>
             2.
           </strong>&nbsp;
-          Как дела?
+          {props.question}
         </span>
         <small> 4 из 15 </small>
       </p>
       <AnswersList
         answers={props.answers}
+        onAnswerClick={props.onAnswerClick}
       />
     </div>
   )

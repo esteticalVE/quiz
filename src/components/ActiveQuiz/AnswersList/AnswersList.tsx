@@ -4,10 +4,12 @@ import AnswerItem from './AnswerItem/AnswerItem';
 
 type TAnswer = {
   text: string
+  id: number
 }
 
 type TProps = {
   answers: Array<TAnswer>
+  onAnswerClick: Function
 }
 
 const AnswersList = (props: TProps) => (
@@ -16,6 +18,7 @@ const AnswersList = (props: TProps) => (
       props.answers.map((answer: TAnswer, index: number) => {
         return (
           <AnswerItem
+            onAnswerClick={props.onAnswerClick}
             key={index}
             answer={answer}
           />
