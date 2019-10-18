@@ -2,6 +2,7 @@ import React from 'react'
 import classes from './ActiveQuiz.module.css'
 import AnswersList from './AnswersList/AnswersList';
 
+//todo номер вопроса и кол-во всех вопросов
 type TAnswer = {
   text: string
   id: number
@@ -11,6 +12,8 @@ type TProps = {
   answers: Array<TAnswer>
   question: string
   onAnswerClick: Function
+  quizLength: number,
+  answerNumber: number
 }
 
 
@@ -20,11 +23,11 @@ const ActiveQuiz = (props: TProps) => {
       <p className={classes.Question}>
         <span>
           <strong>
-            2.
+            {props.answerNumber}.
           </strong>&nbsp;
           {props.question}
         </span>
-        <small> 4 из 15 </small>
+        <small> {props.answerNumber} из {props.quizLength} </small>
       </p>
       <AnswersList
         answers={props.answers}
