@@ -3,7 +3,6 @@ import classes from './Quiz.module.css'
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
 
-
 const Quiz: React.FC = () => {
   const [results, setResults] = useState<any>({})
   const [isFinished, setIsFinished] = useState<boolean>(false)
