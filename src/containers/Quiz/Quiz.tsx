@@ -4,10 +4,9 @@ import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
 
 
-
 const Quiz: React.FC = () => {
-  
-  const [isFinished, setIsFinished] = useState(false)
+  const [results, setResults] = useState<any>({})
+  const [isFinished, setIsFinished] = useState<boolean>(false)
   const [answerState, setAnswerState] = useState<any>(null)
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [quiz, setQuiz] = useState([
@@ -37,22 +36,35 @@ const Quiz: React.FC = () => {
   ])
   const onAnswerClickHandler = (answerId: number | string) => {
     const question = quiz[activeQuestion]
+    const Qresults = results
     if (question.rightAnswerId === answerId) {
+      if (!Qresults[question.id]) {
+        Qresults[question.id] = 'success'
+      }
+      setResults(Qresults)
       setAnswerState({[answerId]: 'success'})
       const timeout = window.setTimeout(() => {
         if (isQuizFinished()) {
           setIsFinished(true)
         } else {
           setActiveQuestion(activeQuestion + 1)
-          setAnswerState([])
+          setAnswerState(null)
         }
         window.clearTimeout(timeout)
       }, 1000)
     } else {
+      Qresults[question.id] = 'error'
       setAnswerState({[answerId]: 'error'})
+      setResults(Qresults)
     }
   }
   
+  const retryHandler = () => {
+    setActiveQuestion(0)
+    setAnswerState(null)
+    setIsFinished(false)
+    setResults({})
+  }
   function isQuizFinished() {
     return activeQuestion + 1 === quiz.length
   }
@@ -65,7 +77,9 @@ const Quiz: React.FC = () => {
         {
           isFinished ?
             <FinishedQuiz
-            
+            results={results}
+            quiz={quiz}
+            onRetry={retryHandler}
             />
             :
             <ActiveQuiz
