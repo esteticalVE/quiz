@@ -22,7 +22,7 @@ type Tprops = {
 }
 
 const FinishedQuiz = (props: Tprops) => {
-  console.log(props.results, 'sakldjajksndjnks')
+  console.log( 'my results: ',props.results)
   const successCount = Object.keys(props.results).reduce((total, key) => {
     if (props.results[key] === 'success') {
       total++
