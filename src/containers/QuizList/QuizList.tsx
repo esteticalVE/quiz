@@ -1,10 +1,32 @@
 import React from 'react'
+import classes from './QuizList.module.css'
+import {NavLink} from "react-router-dom";
 
 const QuizList:React.FC = () => {
+  
+  const renderQuizes =() => {
+    return [1, 2, 3].map((quiz, index: number) => {
+      return (
+        <li
+          key={index}
+        >
+          <NavLink to={`/quiz/${quiz}`}>
+            Тест #{quiz}
+          </NavLink>
+        </li>
+      )
+    })
+  }
+  
   return (
-    <>
-      <h1>QuizList</h1>
-    </>
+    <div className={classes.QuizList}>
+      <div>
+       <h1>Список тестов</h1>
+        <ul>
+          { renderQuizes() }
+        </ul>
+      </div>
+    </div>
   )
 }
 
