@@ -14,7 +14,6 @@ type TProps = {
   key?: any
 }
 
-// universal input for this app
 const Input:React.FC<TProps> = (props: TProps) => {
   const cls = [classes.Input]
   const inputType = props.type || 'text'
@@ -22,12 +21,10 @@ const Input:React.FC<TProps> = (props: TProps) => {
   const isInvalid = ({valid, touched, shouldValidate}: string & number & boolean ) => {
     return !valid && shouldValidate && touched
   }
-  //todo props??
   // @ts-ignore
   if (isInvalid(props)) {
     cls.push(classes.invalid)
   }
-  
   
   return (
     <div className={cls.join(' ')}>

@@ -19,6 +19,8 @@ function validateEmail(email: string) {
 
 
 const Auth: React.FC = () => {
+  
+  const [isFormValid, setisFormValid] = useState(false)
   const [formControls, setformControls] = useState({
     email: {
       value: '',
@@ -77,9 +79,14 @@ const Auth: React.FC = () => {
     control.valid = validateControl(control.value, control.validation)
     // @ts-ignore
     formControlz[controlName] = control
+    let isFormValid = true
+    Object.keys(formControlz).forEach((name) => {
+      // @ts-ignore
+      isFormValid = formControlz[name].valid && isFormValid
+    })
     
     setformControls(formControlz)
-    
+    setisFormValid(isFormValid)
   }
   
   const loginHandler = () => {
@@ -88,7 +95,6 @@ const Auth: React.FC = () => {
   }
   const submitHandler = (event: { preventDefault: () => void; }) => {
     event.preventDefault()
-    
   }
   const renderInputs = () => {
     return Object.keys(formControls).map((controlName, index: string | number) => {
@@ -124,11 +130,13 @@ const Auth: React.FC = () => {
             <Button
               type="success"
               onClick={loginHandler}
+              disabled={!isFormValid}
             > Войти
             </Button>
             <Button
               type="primary"
               onClick={registerHandler}
+              disabled={!isFormValid}
             > Зарегистрироваться
             </Button>
           </div>
