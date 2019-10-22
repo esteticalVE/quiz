@@ -1,0 +1,29 @@
+.Auth {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    flex-grow: 1;
+    width: 100%;
+    background-image: linear-gradient(to bottom right,
+    rgb(71, 168, 207), rgb(61, 148, 199), rgb(52, 128, 191),
+    rgb(42, 109, 182), rgb(33, 89, 174), rgb(23, 69, 166),
+    rgb(26, 86, 144), rgb(28, 102, 122), rgb(31, 119, 100),
+    rgb(33, 135, 78), rgb(36, 152, 56), rgb(38, 168, 34));;
+}
+
+.Auth > div {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+}
+
+.Auth h1 {
+    color: #fff;
+    text-align: center;
+}
+.AuthForm {
+    background: #eee;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+    padding: 15px;
+    border-radius: 5px;
+}
