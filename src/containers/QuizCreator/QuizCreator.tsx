@@ -1,9 +1,10 @@
-import React, {SyntheticEvent, useState} from 'react'
+import React, {SelectHTMLAttributes, SyntheticEvent, useState} from 'react'
 import classes from './QuizCreator.module.css'
 import Button from "../../components/UI/Button/Button";
 import {createControl} from "../../form/formFramework";
 import Input from "../../components/UI/Input/Input";
 import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
+import Select from "../../components/UI/Select/Select";
 
 
 function createOptionControl(number: number) {
@@ -35,9 +36,16 @@ const QuizCreator: React.FC = () => {
   
   const [quiz, setQuiz] = useState([])
   const [formControls, setformControls] = useState(createFormControls())
+  const [rightAnswerId, setrightAnswerId] = useState(1)
   
   
   const changeHandler = (value: any, controlName: string) => {
+    console.log('',value)
+  }
+  
+  const selectChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    console.log(event.target.value)
+    setrightAnswerId(+event.target.value)
   }
   
   const renderControls = () => {
@@ -73,18 +81,31 @@ const QuizCreator: React.FC = () => {
   const createQuizHandler = () => {
   }
   
+  const select = <Select
+    label="Выберите правильный ответ"
+    value={rightAnswerId}
+    onChange={selectChangeHandler}
+    options={[
+      {text: '1', value: 1},
+      {text: '2', value: 2},
+      {text: '3', value: 3},
+      {text: '4', value: 4}
+    ]}
+  />
+  
   return (
     <div className={classes.QuizCreator}>
       <div>
         <h1>Создание теста</h1>
         
         <form onSubmit={submitHandler}>
-          
           {
             renderControls()
           }
+          {
+            select
+          }
           
-          <select></select>
           <Button
             type="primary"
             onClick={addQuestionHandler}
