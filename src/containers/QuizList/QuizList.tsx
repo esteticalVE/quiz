@@ -48,7 +48,6 @@ const QuizList: React.FC = () => {
     <div className={classes.QuizList}>
       <div>
         <h1>Список тестов</h1>
-        
         {
           loading ?
             <Loader/>
@@ -57,7 +56,6 @@ const QuizList: React.FC = () => {
               {renderQuizes()}
             </ul>
         }
-      
       </div>
     </div>
   )

@@ -4,7 +4,7 @@ import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
 import axios from '../../axios/axios-quiz'
 import Loader from "../../components/UI/Loader/Loader";
-
+//todo refactoring
 //todo awesome styles for background
 type Tprops = {
   match: {
@@ -99,7 +99,6 @@ const Quiz: React.FC<Tprops> = (props: Tprops) => {
                 state={answerState}
               />
         }
-        
       </div>
     </div>
   )

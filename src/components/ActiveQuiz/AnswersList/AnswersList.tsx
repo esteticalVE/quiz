@@ -5,7 +5,6 @@ import AnswerItem from './AnswerItem/AnswerItem';
 type TAnswer = {
   text: string
   id: number
-  
 }
 
 type TProps = {

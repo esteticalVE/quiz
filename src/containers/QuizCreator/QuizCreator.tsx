@@ -8,7 +8,6 @@ import Select from "../../components/UI/Select/Select";
 import axios from '../../axios/axios-quiz'
 
 //todo fix ts ignore
-
 function createOptionControl(number: number) {
   return createControl({
     label: `Вариант ${number}`,
@@ -35,12 +34,10 @@ function createFormControls() {
 }
 
 const QuizCreator: React.FC = () => {
-  
   const [quiz, setQuiz] = useState([])
   const [isFormValid, setisFormValid] = useState(false)
   const [rightAnswerId, setrightAnswerId] = useState(1)
   const [formControls, setformControls] = useState(createFormControls())
-  
   
   const changeHandler = (value: string | number, controlName: string
   ) => {
@@ -72,7 +69,6 @@ const QuizCreator: React.FC = () => {
             value={control.value}
             valid={control.valid}
             key={index}
-            // to boolean
             shouldValidate={!!control.validation}
             touched={control.touched}
             errorMessage={control.errorMessage}
@@ -94,7 +90,6 @@ const QuizCreator: React.FC = () => {
     const index = quiz.length + 1
     // destruct
     const {question, option1, option2, option3, option4} = formControls
-    
     const questionItem = {
       question: question.value,
       id: index,
@@ -129,7 +124,6 @@ const QuizCreator: React.FC = () => {
     } catch (e) {
       console.log(e)
     }
-    
   }
   
   const select = <Select
@@ -148,7 +142,6 @@ const QuizCreator: React.FC = () => {
     <div className={classes.QuizCreator}>
       <div>
         <h1>Создание теста</h1>
-        
         <form onSubmit={submitHandler}>
           {
             renderControls()
@@ -156,7 +149,6 @@ const QuizCreator: React.FC = () => {
           {
             select
           }
-          
           <Button
             type="primary"
             onClick={addQuestionHandler}
@@ -172,7 +164,6 @@ const QuizCreator: React.FC = () => {
             Создать тест
           </Button>
         </form>
-      
       </div>
     </div>
   )

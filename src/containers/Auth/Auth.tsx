@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import classes from './Auth.module.css'
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
-
+import axios from 'axios'
 
 
 type Tvalidation = {
@@ -11,7 +11,6 @@ type Tvalidation = {
   minLength?: number
 }
 
-//thx stackoverflow
 function validateEmail(email: string) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
@@ -88,10 +87,34 @@ const Auth: React.FC = () => {
     setisFormValid(isFormValid)
   }
   
-  const loginHandler = () => {
+  const loginHandler = async () => {
+    const authData = {
+      email: formControls.email.value,
+      password: formControls.password.value,
+      returnSecureToken: true
+    }
+    try {
+      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyADlfOkyhsCXtkReK1glI2nTCS4ClYbo9A', authData)
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
   }
-  const registerHandler = () => {
+  
+  const registerHandler = async () => {
+    const authData = {
+      email: formControls.email.value,
+      password: formControls.password.value,
+      returnSecureToken: true
+    }
+    try {
+      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyADlfOkyhsCXtkReK1glI2nTCS4ClYbo9A', authData)
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
   }
+  
   const submitHandler = (event: { preventDefault: () => void; }) => {
     event.preventDefault()
   }
@@ -124,7 +147,6 @@ const Auth: React.FC = () => {
           {
             renderInputs()
           }
-          
           <div>
             <Button
               type="success"
