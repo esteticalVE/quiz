@@ -5,6 +5,7 @@ import {createControl, validate, validateForm} from "../../form/formFramework";
 import Input from "../../components/UI/Input/Input";
 import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import Select from "../../components/UI/Select/Select";
+import axios from 'axios'
 
 //todo fix ts ignore
 
@@ -38,7 +39,6 @@ const QuizCreator: React.FC = () => {
   const [quiz, setQuiz] = useState([])
   const [isFormValid, setisFormValid] = useState(false)
   const [rightAnswerId, setrightAnswerId] = useState(1)
-  
   const [formControls, setformControls] = useState(createFormControls())
   
   
@@ -117,9 +117,19 @@ const QuizCreator: React.FC = () => {
     
   }
   
-  const createQuizHandler = (event: SyntheticEvent) => {
+  const createQuizHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
-    console.log(quiz)
+    try {
+      const response = await axios.post('https://react-ts-quiz.firebaseio.com/quizes.json', quiz)
+      setQuiz([])
+      setisFormValid(false)
+      setrightAnswerId(1)
+      setformControls(createFormControls())
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+    
   }
   
   const select = <Select

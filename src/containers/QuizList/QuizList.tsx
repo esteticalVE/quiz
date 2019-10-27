@@ -1,17 +1,44 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import classes from './QuizList.module.css'
 import {NavLink} from "react-router-dom";
+import Loader from "../../components/UI/Loader/Loader";
+import axios from 'axios'
+import {Simulate} from "react-dom/test-utils";
 
-const QuizList:React.FC = () => {
+const QuizList: React.FC = () => {
   
-  const renderQuizes =() => {
-    return [1, 2, 3].map((quiz, index: number) => {
+  const [loading, setLoading] = useState(true)
+  const [quizes, setQuizes] = useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('https://react-ts-quiz.firebaseio.com/quizes.json')
+        console.log(response.data)
+        let Lquizes: any = []
+        Object.keys(response.data).forEach((key, index) => {
+          Lquizes.push({
+            id: key,
+            name: `Тест #${index + 1}`
+          })
+        })
+        setQuizes(Lquizes)
+        setLoading(false)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    fetchData()
+  }, [])
+  
+  const renderQuizes = () => {
+    //todo type for quiz
+    return quizes.map((quiz: any) => {
       return (
         <li
-          key={index}
+          key={quiz.id}
         >
-          <NavLink to={`/quiz/${quiz}`}>
-            Тест #{quiz}
+          <NavLink to={`/quiz/${quiz.id}`}>
+            {quiz.name}
           </NavLink>
         </li>
       )
@@ -21,10 +48,17 @@ const QuizList:React.FC = () => {
   return (
     <div className={classes.QuizList}>
       <div>
-       <h1>Список тестов</h1>
-        <ul>
-          { renderQuizes() }
-        </ul>
+        <h1>Список тестов</h1>
+        
+        {
+          loading ?
+            <Loader/>
+            :
+            <ul>
+              {renderQuizes()}
+            </ul>
+        }
+      
       </div>
     </div>
   )
