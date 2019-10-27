@@ -69,7 +69,6 @@ const Auth: React.FC = () => {
     return isValid
   }
   
-  // recipe for events
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>, controlName: string) => {
     const formControlz = {...formControls}
     // @ts-ignore

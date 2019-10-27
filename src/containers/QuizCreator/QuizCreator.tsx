@@ -1,11 +1,10 @@
 import React, {SelectHTMLAttributes, SyntheticEvent, useState} from 'react'
 import classes from './QuizCreator.module.css'
 import Button from "../../components/UI/Button/Button";
-import {createControl} from "../../form/formFramework";
+import {createControl, validate, validateForm} from "../../form/formFramework";
 import Input from "../../components/UI/Input/Input";
 import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import Select from "../../components/UI/Select/Select";
-
 
 function createOptionControl(number: number) {
   return createControl({
@@ -35,16 +34,28 @@ function createFormControls() {
 const QuizCreator: React.FC = () => {
   
   const [quiz, setQuiz] = useState([])
-  const [formControls, setformControls] = useState(createFormControls())
+  const [isFormValid, setisFormValid] = useState(false)
   const [rightAnswerId, setrightAnswerId] = useState(1)
   
+  const [formControls, setformControls] = useState(createFormControls())
   
-  const changeHandler = (value: any, controlName: string) => {
-    console.log('',value)
+  
+  const changeHandler = (value: string | number, controlName: string
+  ) => {
+    const formControlz = {...formControls}
+    // @ts-ignore
+    const control = { ...formControlz[controlName]}
+    control.touched = true
+    control.value = value
+    control.valid = validate(control.value, control.validation)
+    // @ts-ignore
+    formControlz[controlName] = control
+    
+    setformControls(formControlz)
+    setisFormValid(validateForm(formControlz))
   }
   
   const selectChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    console.log(event.target.value)
     setrightAnswerId(+event.target.value)
   }
   
@@ -74,11 +85,39 @@ const QuizCreator: React.FC = () => {
   const submitHandler = (event: SyntheticEvent) => {
     event.preventDefault()
   }
-  const addQuestionHandler = () => {
-  
+  const addQuestionHandler = (event: SyntheticEvent ) => {
+    event.preventDefault()
+    //copy array defend mutation
+    const Lquiz = quiz.concat()
+    const index = quiz.length + 1
+    // destruct
+    const {question, option1, option2, option3, option4} = formControls
+    
+    const questionItem = {
+      question: question.value,
+      id: index,
+      rightAnswerId: rightAnswerId,
+      answers: [
+        {text: option1.value, id: option1.id},
+        {text: option2.value, id: option2.id},
+        {text: option3.value, id: option3.id},
+        {text: option4.value, id: option4.id},
+      ]
+    }
+    // @ts-ignore
+    Lquiz.push(questionItem)
+    // add quiz
+    setQuiz(Lquiz)
+    // reload state
+    setisFormValid(false)
+    setrightAnswerId(1)
+    setformControls(createFormControls())
+    
   }
   
-  const createQuizHandler = () => {
+  const createQuizHandler = (event: SyntheticEvent) => {
+    event.preventDefault()
+    console.log(quiz)
   }
   
   const select = <Select
@@ -109,12 +148,14 @@ const QuizCreator: React.FC = () => {
           <Button
             type="primary"
             onClick={addQuestionHandler}
+            disabled={!isFormValid}
           >
             Добавить вопрос
           </Button>
           <Button
             type="success"
             onClick={createQuizHandler}
+            disabled={quiz.length === 0}
           >
             Создать тест
           </Button>

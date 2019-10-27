@@ -1,9 +1,9 @@
-import React from "react";
+import React, {SyntheticEvent} from "react";
 import classes from './Button.module.css'
 
 type TProps = {
   children?: string
-  onClick?: () => void
+  onClick?: (T: SyntheticEvent<Element, Event>) => void
   disabled?: boolean
   type?: any
 }
