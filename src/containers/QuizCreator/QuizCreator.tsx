@@ -6,6 +6,8 @@ import Input from "../../components/UI/Input/Input";
 import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import Select from "../../components/UI/Select/Select";
 
+//todo fix ts ignore
+
 function createOptionControl(number: number) {
   return createControl({
     label: `Вариант ${number}`,
