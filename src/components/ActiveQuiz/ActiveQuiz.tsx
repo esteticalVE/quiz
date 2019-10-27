@@ -9,7 +9,7 @@ type TAnswer = {
 }
 
 type TProps = {
-  answers: Array<TAnswer>
+  answers: Array<TAnswer> | any
   question: string
   onAnswerClick: Function
   quizLength: number,

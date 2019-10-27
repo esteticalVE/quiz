@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react'
 import classes from './QuizList.module.css'
 import {NavLink} from "react-router-dom";
 import Loader from "../../components/UI/Loader/Loader";
-import axios from 'axios'
-import {Simulate} from "react-dom/test-utils";
+import axios from '../../axios/axios-quiz'
 
 const QuizList: React.FC = () => {
   
@@ -12,7 +11,7 @@ const QuizList: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://react-ts-quiz.firebaseio.com/quizes.json')
+        const response = await axios.get('/quizes.json')
         console.log(response.data)
         let Lquizes: any = []
         Object.keys(response.data).forEach((key, index) => {

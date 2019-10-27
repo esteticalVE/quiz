@@ -5,7 +5,7 @@ import {createControl, validate, validateForm} from "../../form/formFramework";
 import Input from "../../components/UI/Input/Input";
 import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import Select from "../../components/UI/Select/Select";
-import axios from 'axios'
+import axios from '../../axios/axios-quiz'
 
 //todo fix ts ignore
 
@@ -120,7 +120,7 @@ const QuizCreator: React.FC = () => {
   const createQuizHandler = async (event: SyntheticEvent) => {
     event.preventDefault()
     try {
-      const response = await axios.post('https://react-ts-quiz.firebaseio.com/quizes.json', quiz)
+      const response = await axios.post('/quizes.json', quiz)
       setQuiz([])
       setisFormValid(false)
       setrightAnswerId(1)

@@ -1,40 +1,45 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import classes from './Quiz.module.css'
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
+import axios from '../../axios/axios-quiz'
+import Loader from "../../components/UI/Loader/Loader";
 
 //todo awesome styles for background
+type Tprops = {
+  match: {
+    isExact?: boolean
+    params: {
+      id: string
+    }
+    path?: string
+    url?: string
+  }
+}
 
-const Quiz: React.FC = (props) => {
+const Quiz: React.FC<Tprops> = (props: Tprops) => {
   const [results, setResults] = useState<any>({})
   const [isFinished, setIsFinished] = useState<boolean>(false)
   const [answerState, setAnswerState] = useState<any>(null)
   const [activeQuestion, setActiveQuestion] = useState(0)
-  const [quiz, setQuiz] = useState([
-    {
-      question: 'Какого цвета небо?',
-      rightAnswerId: 2,
-      id: 1,
-      answers: [
-        {text: 'Черного', id: 1},
-        {text: 'Синего', id: 2},
-        {text: 'Красного', id: 3},
-        {text: 'Зеленого', id: 4}
-      ]
-    },
-    {
-      question: 'В каком году основали Санкт-Петербург',
-      rightAnswerId: 3,
-      id: 2,
-      answers: [
-        {text: '1700', id: 1},
-        {text: '1702', id: 2},
-        {text: '1703', id: 3},
-        {text: '1803', id: 4}
-      ]
-    }
+  const [quiz, setQuiz] = useState<any>([])
+  const [loading, setLoading] = useState(true)
   
-  ])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/quizes/${props.match.params.id}.json`)
+        console.log('response data',response.data)
+        const quizData = response.data
+        setQuiz(quizData)
+        setLoading(false)
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    fetchData()
+  }, [])
+  
   const onAnswerClickHandler = (answerId: number | string) => {
     const question = quiz[activeQuestion]
     const Qresults = results
@@ -76,22 +81,25 @@ const Quiz: React.FC = (props) => {
         <h1> Ответьте на все вопросы </h1>
         
         {
-          isFinished ?
-            <FinishedQuiz
-            results={results}
-            quiz={quiz}
-            onRetry={retryHandler}
-            />
-            :
-            <ActiveQuiz
-              answers={quiz[activeQuestion].answers}
-              question={quiz[activeQuestion].question}
-              onAnswerClick={onAnswerClickHandler}
-              quizLength={quiz.length}
-              answerNumber={activeQuestion + 1}
-              state={answerState}
-            />
+          loading ?
+            <Loader /> :
+            isFinished ?
+              <FinishedQuiz
+                results={results}
+                quiz={quiz}
+                onRetry={retryHandler}
+              />
+              :
+              <ActiveQuiz
+                answers={quiz[activeQuestion].answers}
+                question={quiz[activeQuestion].question}
+                onAnswerClick={onAnswerClickHandler}
+                quizLength={quiz.length}
+                answerNumber={activeQuestion + 1}
+                state={answerState}
+              />
         }
+        
       </div>
     </div>
   )
