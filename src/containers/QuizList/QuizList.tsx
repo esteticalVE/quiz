@@ -2,36 +2,18 @@ import React, {useEffect, useState} from 'react'
 import classes from './QuizList.module.css'
 import {NavLink} from "react-router-dom";
 import Loader from "../../components/UI/Loader/Loader";
-import axios from '../../axios/axios-quiz'
+import { connect } from 'react-redux';
+import {fetchQuizes} from "../../store/actions/quiz";
+import {TQuizListProps, Tquiz} from '../../types/componentTypes/quizlist'
 
-const QuizList: React.FC = () => {
-  
-  const [loading, setLoading] = useState(true)
-  const [quizes, setQuizes] = useState([])
+
+const QuizList: React.FC<TQuizListProps> = (props) => {
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/quizes.json')
-        console.log(response.data)
-        let Lquizes: any = []
-        Object.keys(response.data).forEach((key, index) => {
-          Lquizes.push({
-            id: key,
-            name: `Тест #${index + 1}`
-          })
-        })
-        setQuizes(Lquizes)
-        setLoading(false)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-    fetchData()
+    props.fetchQuizes()
   }, [])
   
   const renderQuizes = () => {
-    //todo type for quiz
-    return quizes.map((quiz: any) => {
+    return props.quizes.map((quiz: Tquiz) => {
       return (
         <li
           key={quiz.id}
@@ -49,7 +31,7 @@ const QuizList: React.FC = () => {
       <div>
         <h1>Список тестов</h1>
         {
-          loading ?
+          props.loading && props.quizes.length !==0 ?
             <Loader/>
             :
             <ul>
@@ -61,4 +43,18 @@ const QuizList: React.FC = () => {
   )
 }
 
-export default QuizList
+
+function mapStateToProps(state: {quiz: {quizes: Array<Tquiz>, loading: boolean} }) {
+  return {
+    quizes: state.quiz.quizes,
+    loading: state.quiz.loading
+  }
+}
+
+function mapDispatchToProps(dispatch: Function) {
+  return {
+    fetchQuizes: () => dispatch(fetchQuizes())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizList)
