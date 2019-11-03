@@ -1,14 +1,16 @@
-import React, {SelectHTMLAttributes, SyntheticEvent, useState} from 'react'
+import React, {SyntheticEvent, useState} from 'react'
 import classes from './QuizCreator.module.css'
 import Button from "../../components/UI/Button/Button";
 import {createControl, validate, validateForm} from "../../form/formFramework";
 import Input from "../../components/UI/Input/Input";
 import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import Select from "../../components/UI/Select/Select";
-import axios from '../../axios/axios-quiz'
+import {connect} from "react-redux";
+import {createQuizQuestion, finishCreateQuiz} from "../../store/actions/create";
+import {TQuiz} from "../../types/componentTypes/quiz";
 
 //todo fix ts ignore
-function createOptionControl(number: number) {
+const createOptionControl = (number: number) => {
   return createControl({
     label: `Вариант ${number}`,
     errorMessage: 'Значение не может быть пустым',
@@ -18,7 +20,7 @@ function createOptionControl(number: number) {
   })
 }
 
-function createFormControls() {
+const createFormControls = () => {
   return {
     question: createControl({
       label: 'Введите вопрос',
@@ -33,17 +35,21 @@ function createFormControls() {
   }
 }
 
-const QuizCreator: React.FC = () => {
-  const [quiz, setQuiz] = useState([])
+type Tprops = {
+  createQuizQuestion: (arg0: any) => void
+  finishCreateQuiz: () => void
+  quiz: TQuiz[] | []
+}
+
+const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
   const [isFormValid, setisFormValid] = useState(false)
   const [rightAnswerId, setrightAnswerId] = useState(1)
   const [formControls, setformControls] = useState(createFormControls())
   
-  const changeHandler = (value: string | number, controlName: string
-  ) => {
+  const changeHandler = (value: string | number, controlName: string) => {
     const formControlz = {...formControls}
     // @ts-ignore
-    const control = { ...formControlz[controlName]}
+    const control = {...formControlz[controlName]}
     control.touched = true
     control.value = value
     control.valid = validate(control.value, control.validation)
@@ -74,7 +80,7 @@ const QuizCreator: React.FC = () => {
             errorMessage={control.errorMessage}
             onChange={event => changeHandler(event.target.value, controlName)}
           />
-          {index === 0 ? <hr /> : null}
+          {index === 0 ? <hr/> : null}
         </Auxiliary>
       )
     })
@@ -83,16 +89,14 @@ const QuizCreator: React.FC = () => {
   const submitHandler = (event: SyntheticEvent) => {
     event.preventDefault()
   }
-  const addQuestionHandler = (event: SyntheticEvent ) => {
+  
+  const addQuestionHandler = (event: SyntheticEvent) => {
     event.preventDefault()
-    //copy array defend mutation
-    const Lquiz = quiz.concat()
-    const index = quiz.length + 1
     // destruct
     const {question, option1, option2, option3, option4} = formControls
     const questionItem = {
       question: question.value,
-      id: index,
+      id: props.quiz.length + 1,
       rightAnswerId: rightAnswerId,
       answers: [
         {text: option1.value, id: option1.id},
@@ -101,29 +105,21 @@ const QuizCreator: React.FC = () => {
         {text: option4.value, id: option4.id},
       ]
     }
-    // @ts-ignore
-    Lquiz.push(questionItem)
-    // add quiz
-    setQuiz(Lquiz)
-    // reload state
+    //add quiz
+    props.createQuizQuestion(questionItem)
+    //reset state
     setisFormValid(false)
     setrightAnswerId(1)
     setformControls(createFormControls())
-    
   }
   
-  const createQuizHandler = async (event: SyntheticEvent) => {
+  const createQuizHandler = (event: SyntheticEvent) => {
     event.preventDefault()
-    try {
-      const response = await axios.post('/quizes.json', quiz)
-      setQuiz([])
-      setisFormValid(false)
-      setrightAnswerId(1)
-      setformControls(createFormControls())
-      console.log(response.data)
-    } catch (e) {
-      console.log(e)
-    }
+    setisFormValid(false)
+    setrightAnswerId(1)
+    setformControls(createFormControls())
+    props.finishCreateQuiz()
+    
   }
   
   const select = <Select
@@ -159,7 +155,7 @@ const QuizCreator: React.FC = () => {
           <Button
             type="success"
             onClick={createQuizHandler}
-            disabled={quiz.length === 0}
+            disabled={props.quiz.length === 0}
           >
             Создать тест
           </Button>
@@ -169,4 +165,17 @@ const QuizCreator: React.FC = () => {
   )
 }
 
-export default QuizCreator
+const mapStateToProps = (state: any) => {
+  return {
+    quiz: state.create.quiz
+  }
+}
+
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    createQuizQuestion: (item: TQuiz) => dispatch(createQuizQuestion(item)),
+    finishCreateQuiz: () => dispatch(finishCreateQuiz())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuizCreator)

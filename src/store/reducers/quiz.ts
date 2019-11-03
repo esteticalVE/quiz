@@ -1,4 +1,4 @@
-import {TState} from "../../types/reducerTypes/quizReducerTypes";
+import {TState} from "../../types/reducerTypes/quizReducer";
 import {TQuiz} from "../../types/componentTypes/quiz";
 import {
   FETCH_QUIZ_SUCCESS,
@@ -39,12 +39,10 @@ export default function quizReducer(
       return {
         ...state, loading: true
       }
-    
     case FETCH_QUIZES_SUCCESS:
       return {
         ...state, loading: false, quizes: action.quizes
       }
-    
     case FETCH_QUIZES_ERROR:
       return {
         ...state, loading: false, error: action.error
@@ -73,7 +71,6 @@ export default function quizReducer(
         isFinished: false,
         results: {}
       }
-    
     default:
       return state
   }

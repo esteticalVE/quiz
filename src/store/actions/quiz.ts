@@ -16,14 +16,14 @@ export const fetchQuizes = () => {
     dispatch(fetchQuizesStart())
     try {
       const response = await axios.get('/quizes.json')
-      let Lquizes: any = []
+      let quizes: {id: string, name: string}[] = []
       Object.keys(response.data).forEach((key, index) => {
-        Lquizes.push({
+        quizes.push({
           id: key,
           name: `Тест #${index + 1}`
         })
       })
-      dispatch(fetchQuizesSuccess(Lquizes))
+      dispatch(fetchQuizesSuccess(quizes))
     } catch (e) {
       dispatch(fetchQuizesError(e))
     }
