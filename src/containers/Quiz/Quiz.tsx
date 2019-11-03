@@ -13,7 +13,7 @@ type Tprops = {
   fetchQuizById: (arg0: string ) => void
   quizAnswerClick: (arg0: number) => void
   retryQuiz: () => void
-  quiz: any
+  quiz: TQuiz[]
   results: {[x: string]: string} | {}
   loading?: boolean
   isFinished: boolean
@@ -63,7 +63,7 @@ const Quiz: React.FC<Tprops> = (props: Tprops) => {
   )
 }
 
-const mapStateToProps = (state: {quiz: {results: object, isFinished: boolean, activeQuestion: number, answerState: string | null | never[], quiz: TQuiz, loading: boolean}}) => {
+const mapStateToProps = (state: {quiz: {results: object, isFinished: boolean, activeQuestion: number, answerState: string | null | never[], quiz: TQuiz[], loading: boolean}}) => {
   return {
     results: state.quiz.results,
     isFinished: state.quiz.isFinished,

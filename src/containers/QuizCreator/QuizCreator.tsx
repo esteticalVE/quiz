@@ -36,7 +36,7 @@ const createFormControls = () => {
 }
 
 type Tprops = {
-  createQuizQuestion: (arg0: any) => void
+  createQuizQuestion: (arg0: TQuiz) => void
   finishCreateQuiz: () => void
   quiz: TQuiz[] | []
 }
@@ -165,7 +165,7 @@ const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
   )
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: {create: { quiz: TQuiz[] | []}}) => {
   return {
     quiz: state.create.quiz
   }

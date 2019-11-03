@@ -25,7 +25,6 @@ type Tprops = {
 }
 
 const FinishedQuiz: React.FC<Tprops> = (props: Tprops) => {
-  console.log( 'my results: ',props.results)
   const successCount = Object.keys(props.results).reduce((total, key) => {
     if (props.results[key] === 'success') {
       total++
