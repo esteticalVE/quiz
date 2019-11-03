@@ -1,12 +1,24 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import classes from './Quiz.module.css'
 import ActiveQuiz from "../../components/ActiveQuiz/ActiveQuiz";
 import FinishedQuiz from "../../components/FinishedQuiz/FinishedQuiz";
-import axios from '../../axios/axios-quiz'
 import Loader from "../../components/UI/Loader/Loader";
-//todo refactoring
+import {connect} from "react-redux";
+import {fetchQuizById, quizAnswerClick, retryQuiz} from "../../store/actions/quiz";
+import {TQuiz} from "../../types/componentTypes/quiz";
+
 //todo awesome styles for background
+
 type Tprops = {
+  fetchQuizById: (arg0: string ) => void
+  quizAnswerClick: (arg0: number) => void
+  retryQuiz: () => void
+  quiz: any
+  results: {[x: string]: string} | {}
+  loading?: boolean
+  isFinished: boolean
+  activeQuestion: number
+  answerState: string | null | never[]
   match: {
     isExact?: boolean
     params: {
@@ -18,85 +30,32 @@ type Tprops = {
 }
 
 const Quiz: React.FC<Tprops> = (props: Tprops) => {
-  const [results, setResults] = useState<any>({})
-  const [isFinished, setIsFinished] = useState<boolean>(false)
-  const [answerState, setAnswerState] = useState<any>(null)
-  const [activeQuestion, setActiveQuestion] = useState(0)
-  const [quiz, setQuiz] = useState<any>([])
-  const [loading, setLoading] = useState(true)
-  
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/quizes/${props.match.params.id}.json`)
-        console.log('response data',response.data)
-        const quizData = response.data
-        setQuiz(quizData)
-        setLoading(false)
-      } catch (e) {
-        console.log(e)
-      }
-    }
-    fetchData()
+    props.fetchQuizById(props.match.params.id)
+    props.retryQuiz()
   }, [])
-  
-  const onAnswerClickHandler = (answerId: number | string) => {
-    const question = quiz[activeQuestion]
-    const Qresults = results
-    if (question.rightAnswerId === answerId) {
-      if (!Qresults[question.id]) {
-        Qresults[question.id] = 'success'
-      }
-      setResults(Qresults)
-      setAnswerState({[answerId]: 'success'})
-      const timeout = window.setTimeout(() => {
-        if (isQuizFinished()) {
-          setIsFinished(true)
-        } else {
-          setActiveQuestion(activeQuestion + 1)
-          setAnswerState(null)
-        }
-        window.clearTimeout(timeout)
-      }, 1000)
-    } else {
-      Qresults[question.id] = 'error'
-      setAnswerState({[answerId]: 'error'})
-      setResults(Qresults)
-    }
-  }
-  
-  const retryHandler = () => {
-    setActiveQuestion(0)
-    setAnswerState(null)
-    setIsFinished(false)
-    setResults({})
-  }
-  function isQuizFinished() {
-    return activeQuestion + 1 === quiz.length
-  }
   
   return (
     <div className={classes.Quiz}>
       <div className={classes.QuizWrapper}>
         <h1> Ответьте на все вопросы </h1>
-        
         {
-          loading ?
+          props.loading || !props.quiz ?
             <Loader /> :
-            isFinished ?
+            props.isFinished ?
               <FinishedQuiz
-                results={results}
-                quiz={quiz}
-                onRetry={retryHandler}
+                results={props.results}
+                quiz={props.quiz}
+                onRetry={props.retryQuiz}
               />
               :
               <ActiveQuiz
-                answers={quiz[activeQuestion].answers}
-                question={quiz[activeQuestion].question}
-                onAnswerClick={onAnswerClickHandler}
-                quizLength={quiz.length}
-                answerNumber={activeQuestion + 1}
-                state={answerState}
+                answers={props.quiz[props.activeQuestion].answers}
+                question={props.quiz[props.activeQuestion].question}
+                onAnswerClick={props.quizAnswerClick}
+                quizLength={props.quiz.length}
+                answerNumber={props.activeQuestion + 1}
+                state={props.answerState}
               />
         }
       </div>
@@ -104,4 +63,23 @@ const Quiz: React.FC<Tprops> = (props: Tprops) => {
   )
 }
 
-export default Quiz
+const mapStateToProps = (state: {quiz: {results: object, isFinished: boolean, activeQuestion: number, answerState: string | null | never[], quiz: TQuiz, loading: boolean}}) => {
+  return {
+    results: state.quiz.results,
+    isFinished: state.quiz.isFinished,
+    activeQuestion: state.quiz.activeQuestion,
+    answerState: state.quiz.answerState,
+    quiz: state.quiz.quiz,
+    loading: state.quiz.loading
+  }
+}
+
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    fetchQuizById: (id: string ) => dispatch(fetchQuizById(id)),
+    quizAnswerClick: (answerId:  number) => dispatch(quizAnswerClick(answerId)),
+    retryQuiz: () => dispatch(retryQuiz())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Quiz)

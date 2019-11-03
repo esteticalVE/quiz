@@ -7,7 +7,7 @@ type Tprops = {
 }
 
 
-const MenuToggle = (props: Tprops) => {
+const MenuToggle: React.FC<Tprops> = (props: Tprops) => {
   const cls = [
     classes.MenuToggle,
     'fa',

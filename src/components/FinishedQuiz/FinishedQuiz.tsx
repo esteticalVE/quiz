@@ -32,7 +32,6 @@ const FinishedQuiz = (props: Tprops) => {
     }
     return total
   }, 0)
-  console.log('finished quiz', props)
   
   return (
     <div className={classes.FinishedQuiz}>

@@ -19,7 +19,7 @@ type TFormControls = {
 }
 
 
-export function createControl(config: any, validation: any) {
+export const createControl = (config: any, validation: any) => {
   return {
     ...config,
     validation,
@@ -30,7 +30,7 @@ export function createControl(config: any, validation: any) {
 }
 
 
-export function validate(value: string, validation: TValue | null = null) {
+export const validate = (value: string, validation: TValue | null = null) => {
   if (!validation) {
     return true
   }
@@ -42,7 +42,7 @@ export function validate(value: string, validation: TValue | null = null) {
   return isValid
 }
 
-export function validateForm(formControls: TFormControls): boolean {
+export const validateForm = (formControls: TFormControls): boolean => {
   let isFormValid = true
   for (let control in formControls) {
     if (formControls.hasOwnProperty(control)) {

@@ -1,3 +1,5 @@
+import {TQuiz} from "../componentTypes/quiz";
+
 type Tquiz = {
   id: string,
   name: string
@@ -6,6 +8,10 @@ type Tquiz = {
 export type TState = {
   readonly quizes: Array<Tquiz>
   readonly loading: boolean
-  //todo error? r not..
   readonly error: Error | null
+  results: object,
+  isFinished: boolean,
+  activeQuestion: number,
+  answerState: null | any,
+  quiz: null | TQuiz
 }
