@@ -3,33 +3,15 @@ import classes from './Drawer.module.css'
 import Backdrop from "../../UI/Backdrop/Backdrop";
 import {NavLink} from "react-router-dom";
 
-const links = [
-  {
-    to: '/',
-    label: 'Список',
-    exact: true
-  },
-  {
-    to: '/auth',
-    label: 'Авторизация',
-    exact: false
-  },
-  {
-    to: '/quiz-creator',
-    label: 'Создать тест',
-    exact: false
-  },
-]
-
-type TProps = {
+type Tprops = {
   isOpen: boolean
   onClose: () => void
+  isAuthenticated: boolean
 }
 
-
-const Drawer: React.FC<TProps> = (props: TProps) => {
-  
+const Drawer: React.FC<Tprops> = (props: Tprops) => {
   const cls = [classes.Drawer]
+  
   if (!props.isOpen) {
     cls.push(classes.close)
   }
@@ -38,8 +20,8 @@ const Drawer: React.FC<TProps> = (props: TProps) => {
     props.onClose()
   }
   
-  const renderLinks = () => {
-    return links.map((link, index) => {
+  const renderLinks = (links: {to: string, label: string, exact?: boolean}[] ) => {
+    return links.map((link: {to: string, label: string, exact?: boolean}, index: number) => {
       return (
         <li key={index}>
           <NavLink
@@ -53,17 +35,24 @@ const Drawer: React.FC<TProps> = (props: TProps) => {
     })
   }
   
+  const links = [{to: '/', label: 'Список', exact: true},]
+  
+  if (props.isAuthenticated) {
+    links.push( {to: '/quiz-creator', label: 'Создать тест', exact: false})
+    links.push( {to: '/logout', label: 'Выход', exact: false})
+  } else {
+    links.push({to: '/auth', label: 'Авторизация', exact: false},)
+  }
+  
   return (
     <>
-    <nav className={cls.join(' ')}>
-      <ul>
-        {
-          renderLinks()
-        }
-      </ul>
-    </nav>
+      <nav className={cls.join(' ')}>
+        <ul>
+          {renderLinks(links)}
+        </ul>
+      </nav>
       { props.isOpen ? <Backdrop onClick={props.onClose}/> : null }
-      </>
+    </>
   )
 }
 

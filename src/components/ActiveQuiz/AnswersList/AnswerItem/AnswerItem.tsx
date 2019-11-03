@@ -1,7 +1,7 @@
 import React from 'react'
 import classes from './AnswerItem.module.css'
 
-type TProps = {
+type Tprops = {
   state: string | null,
   onAnswerClick: Function,
   answer: {
@@ -10,7 +10,7 @@ type TProps = {
   }
 }
 
-const AnswerItem = (props: TProps) => {
+const AnswerItem: React.FC<Tprops> = (props: Tprops) => {
   const cls = [classes.AnswerItem]
   
   if (props.state) {

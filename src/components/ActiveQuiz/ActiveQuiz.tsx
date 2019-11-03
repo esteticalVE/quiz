@@ -3,13 +3,13 @@ import classes from './ActiveQuiz.module.css'
 import AnswersList from './AnswersList/AnswersList';
 
 
-type TAnswer = {
+type Tanswer = {
   text: string
   id: number
 }
 
-type TProps = {
-  answers: Array<TAnswer> | any
+type Tprops = {
+  answers: Tanswer[]
   question: string
   onAnswerClick: Function
   quizLength: number,
@@ -18,7 +18,7 @@ type TProps = {
 }
 
 
-const ActiveQuiz = (props: TProps) => {
+const ActiveQuiz: React.FC<Tprops> = (props: Tprops) => {
   return (
     <div className={classes.ActiveQuiz}>
       <p className={classes.Question}>

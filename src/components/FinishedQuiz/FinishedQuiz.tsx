@@ -2,7 +2,6 @@ import React from "react";
 import classes from './FinishedQuiz.module.css'
 import Button from '../UI/Button/Button'
 import {Link} from 'react-router-dom'
-
 //todo awesome styles for buttons
 
 type Tanswers = {
@@ -11,16 +10,15 @@ type Tanswers = {
 }
 
 type Tquestion = {
-  answers?: Array<Tanswers>
+  answers?: Tanswers[]
   id: number
   question: string
   rightAnswerId: number
 }
 
-//todo type for results
 type Tprops = {
   results?: any
-  quiz?: Array<Tquestion>
+  quiz?: Tquestion[]
   onRetry?: () => void
 }
 
@@ -55,7 +53,6 @@ const FinishedQuiz: React.FC<Tprops> = (props: Tprops) => {
         })}
       </ul>
       <p>
-        
         Правильно {successCount} из {props.quiz!.length}
       </p>
       <div>

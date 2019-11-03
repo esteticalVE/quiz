@@ -11,4 +11,6 @@ export const  QUIZ_RETRY = 'QUIZ_RETRY'
 //for create
 export const CREATE_QUIZ_QUESTION = 'CREATE_QUIZ_QUESTION'
 export const RESET_QUIZ_CREATION = 'RESET_QUIZ_CREATION'
-
+//for auth
+export const AUTH_SUCCESS = 'AUTH_SUCCESS'
+export const AUTH_LOGOUT = 'AUTH_LOGOUT'

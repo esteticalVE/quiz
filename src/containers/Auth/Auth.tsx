@@ -2,7 +2,8 @@ import React, {useState} from 'react'
 import classes from './Auth.module.css'
 import Button from "../../components/UI/Button/Button";
 import Input from "../../components/UI/Input/Input";
-import axios from 'axios'
+import {connect} from "react-redux";
+import {auth} from "../../store/actions/auth";
 
 
 type Tvalidation = {
@@ -16,8 +17,11 @@ function validateEmail(email: string) {
   return re.test(String(email).toLowerCase());
 }
 
+type Tprops = {
+  auth: (email: string, password: string, isLogin: boolean) => void
+}
 
-const Auth: React.FC = () => {
+const Auth: React.FC<Tprops> = (props: Tprops) => {
   
   const [isFormValid, setisFormValid] = useState(false)
   const [formControls, setformControls] = useState({
@@ -87,32 +91,21 @@ const Auth: React.FC = () => {
     setisFormValid(isFormValid)
   }
   
-  const loginHandler = async () => {
-    const authData = {
-      email: formControls.email.value,
-      password: formControls.password.value,
-      returnSecureToken: true
-    }
-    try {
-      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyADlfOkyhsCXtkReK1glI2nTCS4ClYbo9A', authData)
-      console.log(response.data)
-    } catch (e) {
-      console.log(e)
-    }
+  const loginHandler = () => {
+    props.auth(
+      formControls.email.value,
+      formControls.password.value,
+      true
+    )
   }
   
-  const registerHandler = async () => {
-    const authData = {
-      email: formControls.email.value,
-      password: formControls.password.value,
-      returnSecureToken: true
-    }
-    try {
-      const response = await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyADlfOkyhsCXtkReK1glI2nTCS4ClYbo9A', authData)
-      console.log(response.data)
-    } catch (e) {
-      console.log(e)
-    }
+  const registerHandler = () => {
+    props.auth(
+      formControls.email.value,
+      formControls.password.value,
+      false
+    )
+    
   }
   
   const submitHandler = (event: { preventDefault: () => void; }) => {
@@ -167,4 +160,10 @@ const Auth: React.FC = () => {
   )
 }
 
-export default Auth
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    auth: (email: string, password: string, isLogin: boolean) => dispatch(auth(email, password, isLogin))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(Auth)

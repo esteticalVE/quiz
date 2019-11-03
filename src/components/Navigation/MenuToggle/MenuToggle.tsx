@@ -24,7 +24,6 @@ const MenuToggle: React.FC<Tprops> = (props: Tprops) => {
     <i
     className={cls.join(' ')}
     onClick={props.onToggle}
-    
     />
   )
 }
