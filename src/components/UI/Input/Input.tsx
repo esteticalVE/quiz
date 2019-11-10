@@ -25,15 +25,16 @@ const Input:React.FC<TProps> = (props: TProps) => {
   if (isInvalid(props)) {
     cls.push(classes.invalid)
   }
-  
+
   return (
     <div className={cls.join(' ')}>
-      <label htmlFor={htmlFor}> {props.label}</label>
+      {/*<label htmlFor={htmlFor}> {props.label}</label>*/}
       <input
         type={inputType}
         id={htmlFor}
         value={props.value}
         onChange={props.onChange}
+        placeholder={props.label}
       />
       {
         // @ts-ignore
