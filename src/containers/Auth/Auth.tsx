@@ -12,7 +12,7 @@ type Tvalidation = {
   minLength?: number
 }
 
-function validateEmail(email: string) {
+const validateEmail = (email: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
@@ -22,7 +22,6 @@ type Tprops = {
 }
 
 const Auth: React.FC<Tprops> = (props: Tprops) => {
-
   const [isFormValid, setisFormValid] = useState(false)
   const [formControls, setformControls] = useState({
     email: {
@@ -86,7 +85,6 @@ const Auth: React.FC<Tprops> = (props: Tprops) => {
       // @ts-ignore
       isFormValid = formControlz[name].valid && isFormValid
     })
-
     setformControls(formControlz)
     setisFormValid(isFormValid)
   }

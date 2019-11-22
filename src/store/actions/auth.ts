@@ -7,22 +7,29 @@ export const auth = (email: string, password: string, isLogin: boolean) => {
       email, password,
       returnSecureToken: true
     }
-    
+
     let url: string = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_SIGN_UP_KEY}`
     if (isLogin) {
       url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_SIGN_IN_KEY}`
     }
-    const response = await axios.post(url, authData)
-    const data = response.data
-    const expirationDate = new Date(new Date().getTime() + data.expiresIn * 1000)
-    
-    localStorage.setItem('token', data.idToken)
-    localStorage.setItem('userID', data.localId)
-    // @ts-ignore
-    localStorage.setItem('expirationDate', expirationDate)
-    
-    dispatch(authSuccess(data.idToken))
-    dispatch(autoLogout(data.expiresIn))
+    try {
+      const response = await axios.post(url, authData)
+      const data = response.data
+      const expirationDate = new Date(new Date().getTime() + data.expiresIn * 1000)
+      localStorage.setItem('token', data.idToken)
+      localStorage.setItem('userID', data.localId)
+      // @ts-ignore
+      localStorage.setItem('expirationDate', expirationDate)
+
+      dispatch(authSuccess(data.idToken))
+      dispatch(autoLogout(data.expiresIn))
+
+    }
+    catch (e) {
+      const error = JSON.parse(e.response.request.responseText)
+      console.log('error:',error.error.message)
+    }
+
   }
 }
 
