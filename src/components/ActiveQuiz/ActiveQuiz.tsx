@@ -2,7 +2,6 @@ import React from 'react'
 import classes from './ActiveQuiz.module.css'
 import AnswersList from './AnswersList/AnswersList';
 
-
 type Tanswer = {
   text: string
   id: number
