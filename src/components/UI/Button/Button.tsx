@@ -2,7 +2,7 @@ import React, {SyntheticEvent} from "react";
 import classes from './Button.module.css'
 
 type TProps = {
-  children?: string
+  children?: any
   onClick?: (T: SyntheticEvent<Element, Event>) => void
   disabled?: boolean
   type?: any
@@ -13,7 +13,7 @@ const Button = (props: TProps) => {
     classes.Button,
     classes[props.type]
   ]
-  
+
   return (
     <button
     onClick={props.onClick}

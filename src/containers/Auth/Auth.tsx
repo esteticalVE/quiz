@@ -12,7 +12,7 @@ type Tvalidation = {
   minLength?: number
 }
 
-function validateEmail(email: string) {
+const validateEmail = (email: string) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
@@ -22,13 +22,12 @@ type Tprops = {
 }
 
 const Auth: React.FC<Tprops> = (props: Tprops) => {
-  
   const [isFormValid, setisFormValid] = useState(false)
   const [formControls, setformControls] = useState({
     email: {
       value: '',
       type: 'email',
-      label: 'Email',
+      label: 'Почта',
       errorMessage: 'Введите корректный email',
       valid: false,
       touched: false,
@@ -50,28 +49,28 @@ const Auth: React.FC<Tprops> = (props: Tprops) => {
       }
     }
   })
-  
+
   const validateControl = (value: string, validation: Tvalidation) => {
     if (!validation) {
       return true
     }
     let isValid = true
-    
+
     if (validation.required) {
       isValid = value.trim() !== '' && isValid
     }
-    
+
     if (validation.email) {
       isValid = validateEmail(value) && isValid
     }
-    
+
     if (validation.minLength) {
       isValid = value.length >= validation.minLength && isValid
     }
-    
+
     return isValid
   }
-  
+
   const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>, controlName: string) => {
     const formControlz = {...formControls}
     // @ts-ignore
@@ -86,11 +85,10 @@ const Auth: React.FC<Tprops> = (props: Tprops) => {
       // @ts-ignore
       isFormValid = formControlz[name].valid && isFormValid
     })
-    
     setformControls(formControlz)
     setisFormValid(isFormValid)
   }
-  
+
   const loginHandler = () => {
     props.auth(
       formControls.email.value,
@@ -98,16 +96,16 @@ const Auth: React.FC<Tprops> = (props: Tprops) => {
       true
     )
   }
-  
+
   const registerHandler = () => {
     props.auth(
       formControls.email.value,
       formControls.password.value,
       false
     )
-    
+
   }
-  
+
   const submitHandler = (event: { preventDefault: () => void; }) => {
     event.preventDefault()
   }
@@ -131,7 +129,7 @@ const Auth: React.FC<Tprops> = (props: Tprops) => {
       )
     })
   }
-  
+
   return (
     <div className={classes.Auth}>
       <div>

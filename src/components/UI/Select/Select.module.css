@@ -7,15 +7,18 @@
     padding: 0;
     font-weight: bold;
     display: block;
+    color: #fff;
 }
 
 .Select select {
     display: block;
     box-sizing: border-box;
     border: 1px solid #bebebe;
+    color: #fff;
+    background: transparent;
     margin: 0 0 5px;
     height: 29px;
-    width: 93%;
+    width: 100%;
     outline: none;
     transition: all 300ms ease-in-out;
 }

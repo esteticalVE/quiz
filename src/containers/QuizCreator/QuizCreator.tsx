@@ -45,7 +45,7 @@ const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
   const [isFormValid, setisFormValid] = useState(false)
   const [rightAnswerId, setrightAnswerId] = useState(1)
   const [formControls, setformControls] = useState(createFormControls())
-  
+
   const changeHandler = (value: string | number, controlName: string) => {
     const formControlz = {...formControls}
     // @ts-ignore
@@ -55,15 +55,14 @@ const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
     control.valid = validate(control.value, control.validation)
     // @ts-ignore
     formControlz[controlName] = control
-    
     setformControls(formControlz)
     setisFormValid(validateForm(formControlz))
   }
-  
+
   const selectChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setrightAnswerId(+event.target.value)
   }
-  
+
   const renderControls = () => {
     return Object.keys(formControls).map((controlName, index) => {
       // @ts-ignore
@@ -85,11 +84,11 @@ const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
       )
     })
   }
-  
+
   const submitHandler = (event: SyntheticEvent) => {
     event.preventDefault()
   }
-  
+
   const addQuestionHandler = (event: SyntheticEvent) => {
     event.preventDefault()
     // destruct
@@ -112,16 +111,16 @@ const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
     setrightAnswerId(1)
     setformControls(createFormControls())
   }
-  
+
   const createQuizHandler = (event: SyntheticEvent) => {
     event.preventDefault()
     setisFormValid(false)
     setrightAnswerId(1)
     setformControls(createFormControls())
     props.finishCreateQuiz()
-    
+
   }
-  
+
   const select = <Select
     label="Выберите правильный ответ"
     value={rightAnswerId}
@@ -133,7 +132,7 @@ const QuizCreator: React.FC<Tprops> = (props: Tprops) => {
       {text: '4', value: 4}
     ]}
   />
-  
+
   return (
     <div className={classes.QuizCreator}>
       <div>
